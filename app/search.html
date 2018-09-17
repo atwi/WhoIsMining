@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Who is mining? | Check if a website is mining cryptocurrency</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="description" content="Who is mining checks if a website is secretly mining crypto currency abusing visitors CPU power">
+    <meta property="og:site_name" content="Who is mining">
+    <meta property="og:title" content="Who is mining?">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://ph-files.imgix.net/57d806cf-21a4-48b2-883e-2eb223d213b4?auto=format&auto=compress&codec=mozjpeg&cs=strip">
+    <meta property="og:description" content="a">
+    <meta property="og:url" content="https://whoismining.com">
+    <meta property="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <style type="text/css">
+      input:focus{
+        outline: none;
+        border: none;
+      }
+      #main-hero {
+        margin-top: 4rem;
+        font-size: 5rem;
+      }
+      .subtitle {
+        padding-top: 1rem;
+      }
+      #s {
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+        border-radius: 2px;
+      }
+      #search-container {
+        margin-top: 3rem;
+      }
+      #link-to-blog {
+        color: #000;
+      }
+      #link-to-blog:hover {
+        cursor: help;
+      }
+      #result-table {
+        width: 100%;
+      }
+      #result-table > td {
+        text-overflow: ellipsis;
+      }
+      #scan-description, #progress-bar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-v-centered">
+        <div class="column is-half is-offset-one-quarter">
+          <h1 class="title has-text-weight-bold has-text-centered" id="main-hero">
+            who is <span class="has-text-link">mining</span>
+          </h1>
+          <p class="subtitle is-size-4 has-text-centered">
+            websites can be secretly <span class="has-text-weight-bold" id="link-to-blog">mining cryptocurrency</span><br/> unmask them here
+          </p>
+          <div class="field is-grouped" id="search-container">
+            <p class="control is-expanded">
+              <input class="input is-medium" type="text" id="s" onkeyup="searchFn(event)" placeholder="http://shadywebsite.com">
+            </p>
+          </div>
+          <p id="scan-description"><span id="scan-msg">🔍 Scanning</span> <span class="has-text-weight-bold" id="scan-url">http://shadywebsite.com</span>...</p>
+          <progress class="progress is-link" id="progress-bar" value="5" max="100">30%</progress>
+        </div>
+      </div>
+      <div class="column is-half is-offset-one-quarter">
+        <h2 class="has-text-weight-bold has-text-centered">
+          <a href="https://www.buymeacoffee.com/diego">Keep this service up and running. Give a coffe away ☕️</a>
+        </h2>
+      </div>
+    </div>
+  </section>
+  </body>
+  <script>
+    function get(u, cb) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                cb(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", u, true);
+        xmlHttp.send(null);
+    }
+    window.onload = function(){ document.getElementById('s').focus(); }
+    var progressStep = 1;
+    var gotResult = false;
+    var progress;
+    var searchFn = function (event) {
+      progressStep = 5;
+      gotResult = false;
+      var query = document.getElementById('s').value;
+      if (event.keyCode != 13 || !query || query.trim() == "") {
+        return;
+      }
+      document.getElementById('progress-bar').value = 5;
+      document.getElementById('scan-url').innerHTML = query;
+      document.getElementById('progress-bar').style.display = 'block';
+      document.getElementById('progress-bar').className = 'progress is-link';
+      document.getElementById('scan-description').style.display = 'block';
+      document.getElementById('scan-msg').innerHTML = '🔍 Scanning';
+      document.getElementById('scan-url').innerHTML = query;
+      get('/?q='+document.getElementById('s').value, function(d) {
+        gotResult = true;
+        progressStep = 5;
+        var r = JSON.parse(d);
+        if (r.url == "") {
+          document.getElementById('scan-msg').innerHTML = '⚠️ Unable to scan';
+          document.getElementById('scan-url').innerHTML = query;
+          document.getElementById('progress-bar').className = 'progress is-danger';
+          return;
+        }
+        if (r.miner != "") {
+          document.getElementById('scan-msg').innerHTML = '⛏ <b>'+r.url+'</b> is mining with';
+          document.getElementById('scan-url').innerHTML = r.miner;
+          document.getElementById('progress-bar').className = 'progress is-warning';
+        } else {
+          document.getElementById('scan-msg').innerHTML = '👌 No miners found for';
+          document.getElementById('scan-url').innerHTML = r.url;
+          document.getElementById('progress-bar').className = 'progress is-success';
+        }
+      });
+      progress = setInterval(function() {
+        var value = document.getElementById('progress-bar').value;
+        if (value >= 100) {
+          clearInterval(progress);
+          return;
+        }
+        if (value >= 60 && !gotResult) {
+          progressStep = 0.1;
+        }
+        document.getElementById('progress-bar').value += progressStep;
+      }, 70);
+    };
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-72181251-5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-72181251-5');
+  </script>
+</html>

@@ -1,0 +1,23 @@
+version: '3'
+services:
+    app:
+        container_name: app
+        restart: always
+        build: ./app
+        ports:
+            - "8080"
+
+    nginx:
+        container_name: nginx
+        restart: always
+        image: nginx:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/ssl:/etc/nginx/ssl
+            - ./nginx/sites-available:/etc/nginx/sites-available
+            - ./nginx/www/whoismining.com:/var/www/whoismining.com
+        links:
+            - app:app
