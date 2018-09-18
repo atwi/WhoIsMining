@@ -20,7 +20,7 @@
 #  name = "github.com/x/y"
 #  version = "2.4.0"
 [metadata.heroku]
-  root-package = "whoismining.com"
+  root-package = "whoismining"
   go-version = "go1.10.4"
   install = [ "." ]
   ensure = "true"
