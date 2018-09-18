@@ -21,6 +21,6 @@
 #  version = "2.4.0"
 [metadata.heroku]
   root-package = "github.com/0x13a/whoismining.com"
-  go-version = "go1.10.3"
+  go-version = "go1.10.4"
   install = [ "." ]
   ensure = "true"
